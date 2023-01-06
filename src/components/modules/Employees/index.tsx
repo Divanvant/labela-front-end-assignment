@@ -7,7 +7,7 @@ import { Employee, EmployeeFilter } from 'modules';
 export const Employees = () => {
   const { isLoading, data } = useGetTeam();
 
-  const employees = data?.items?.employees || [];
+  const employees = data?.items[0].employees || [];
 
   const employeeFunctions: string[] = [];
 
