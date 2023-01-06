@@ -18,6 +18,7 @@ export const Employees = () => {
   const [employees, setEmployees] = React.useState<EmployeeType[]>([]);
   const [offices, setOffices] = React.useState<OfficeData[]>([]);
   const [allEmployeeFunctions, setAllEmployeeFunctions] = React.useState({});
+  const [isOpen, setIsOpen] = React.useState(false);
   const { isLoading, data: employeeData } = useGetTeam();
   const { data: officeData } = useGetOffices();
 
@@ -72,7 +73,10 @@ export const Employees = () => {
   };
 
   const filterEmployees = (filterFunction) => {
-    const filteredEmployees = getFilteredEmployees(filterFunction, data?.items[0].employees);
+    const filteredEmployees = getFilteredEmployees(
+      filterFunction,
+      employeeData?.items[0].employees,
+    );
     setEmployees(filteredEmployees);
   };
 
@@ -94,6 +98,20 @@ export const Employees = () => {
               />
             ))}
           </Grid>
+          <Modal.Root
+            closeModal={() => setIsOpen(false)}
+            openModal={() => setIsOpen(true)}
+            isOpen={isOpen}
+          >
+            <Modal.Trigger>
+              <ButtonWrapper>
+                <Button onClick={() => setIsOpen(true)}>Add new Employee</Button>
+              </ButtonWrapper>
+            </Modal.Trigger>
+            <Modal.Container>
+              <NewEmployeeForm />
+            </Modal.Container>
+          </Modal.Root>
         </>
       )}
     </>
