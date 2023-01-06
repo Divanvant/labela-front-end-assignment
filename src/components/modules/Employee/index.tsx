@@ -2,8 +2,13 @@ import * as React from 'react';
 import Image from 'next/image';
 
 import { EmployeeContainer } from './styled';
+import { Employee as EmployeeType } from 'queries/types';
 
-export const Employee = ({ employee }) => {
+type Props = {
+  employee: EmployeeType;
+};
+
+export const Employee: React.FC<Props> = ({ employee }) => {
   return (
     <EmployeeContainer>
       <Image
