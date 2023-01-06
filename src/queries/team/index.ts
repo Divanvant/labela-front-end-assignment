@@ -1,8 +1,8 @@
-import * as i from 'types';
 import { useQuery } from '@tanstack/react-query';
+import { Team } from './types';
 
-export const fetchTeam = async (): Promise<i.Team> => await (await fetch('/api/team')).json();
+export const fetchTeam = async (): Promise<Team> => await (await fetch('/api/team')).json();
 
 export const useGetTeam = () => {
-  return useQuery<i.Team>(['team'], () => fetchTeam());
+  return useQuery<Team>(['team'], () => fetchTeam());
 };

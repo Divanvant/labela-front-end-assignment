@@ -1,9 +1,13 @@
 import * as React from 'react';
 
 import { useGetTeam } from 'queries/team';
-import { Grid, Paragraph } from 'common';
+import { Button, Grid, Modal, Paragraph } from 'common';
 import { Employee, EmployeeFilter } from 'modules';
+import { useGetOffices } from 'queries/offices';
 import { Employee as EmployeeType } from 'types';
+import { OfficeData } from 'queries/offices/types';
+import { NewEmployeeForm } from 'modules/NewEmployeeForm';
+import { ButtonWrapper } from 'modules/NewEmployeeForm/styled';
 
 type EmployeeFunction = {
   employeeFunction: string;
@@ -12,12 +16,17 @@ type EmployeeFunction = {
 
 export const Employees = () => {
   const [employees, setEmployees] = React.useState<EmployeeType[]>([]);
+  const [offices, setOffices] = React.useState<OfficeData[]>([]);
   const [allEmployeeFunctions, setAllEmployeeFunctions] = React.useState({});
-  const { isLoading, data } = useGetTeam();
+  const { isLoading, data: employeeData } = useGetTeam();
+  const { data: officeData } = useGetOffices();
 
   React.useEffect(() => {
-    const employees = data?.items[0].employees || [];
+    const employees = employeeData?.items[0].employees || [];
     setEmployees(employees);
+
+    const offices = officeData?.items[0].offices || [];
+    setOffices(offices);
 
     const allEmployeeFunctions = employees.reduce((acc, curr) => {
       acc[curr.value.function] = (acc[curr.value.function] || 0) + 1;
@@ -25,7 +34,7 @@ export const Employees = () => {
     }, {});
 
     setAllEmployeeFunctions(allEmployeeFunctions);
-  }, [data]);
+  }, [employeeData, officeData]);
 
   const getFiltersFunction = () => {
     let filteredEmployeeFunctions: EmployeeFunction[] = [];
@@ -67,6 +76,8 @@ export const Employees = () => {
     setEmployees(filteredEmployees);
   };
 
+  const getEmployeeOffice = (officeId) => offices.filter((item) => item.id === officeId)[0];
+
   return (
     <>
       {isLoading ? (
@@ -76,7 +87,11 @@ export const Employees = () => {
           <EmployeeFilter employeeFunctions={employeeFunctions} filterEmployees={filterEmployees} />
           <Grid>
             {employees.map((employee) => (
-              <Employee employee={employee} key={employee.id} />
+              <Employee
+                employee={employee}
+                key={employee.id}
+                office={getEmployeeOffice(employee.value.office_id)}
+              />
             ))}
           </Grid>
         </>

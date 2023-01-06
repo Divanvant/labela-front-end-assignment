@@ -35,7 +35,7 @@ export type ModalContentProps = {
 };
 
 export const ModalContent = styled.div`
-  padding: 30px;
+  padding: 66px 30px 30px;
 `;
 
 export const ModalFooter = styled.div`
